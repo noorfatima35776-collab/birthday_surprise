@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Birthday Surprise 🎂</title>
+
+<!-- QR Scanner Library -->
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+<style>
+
+/* =========================
+   GENERAL
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3, #8e44ad);
+    color: pink;
+}
+
+/* =========================
+   COMMON PAGE
+========================= */
+birthdaypage h1{
+    color: black;
+}
+.page {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.page.active {
+    display: flex;
+    animation: pageIn 1s ease;
+}
+
+@keyframes pageIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+button {
+    border: none;
+    padding: 14px 30px;
+    border-radius: 30px;
+    font-size: 18px;
+    cursor: pointer;
+    background: white;
+    color: #e84393;
+    font-weight: bold;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.1);
+    background: #ffe6f2;
+}
+
+/* =========================
+   QR PAGE
+========================= */
+
+#qrPage {
+    flex-direction: column;
+}
+
+#qrPage h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+    animation: glow 2s infinite alternate;
+}
+
+#qrPage p {
+    margin-bottom: 20px;
+}
+
+#reader {
+    width: 320px;
+    max-width: 90vw;
+    background: black;
+    padding: 10px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 5px white;
+    }
+
+    to {
+        text-shadow:
+        0 0 10px white,
+        0 0 20px #fff,
+        0 0 30px black;
+    }
+}
+
+/* =========================
+   COUNTDOWN
+========================= */
+
+#countdownPage {
+    flex-direction: column;
+}
+
+#countdown {
+    font-size: 130px;
+    font-weight: bold;
+    animation: countdownAnim 1s infinite;
+}
+
+@keyframes countdownAnim {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.3);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+}
+
+/* =========================
+   HAPPY BIRTHDAY
+========================= */
+
+#birthdayPage {
+    flex-direction: column;
+}
+
+#birthdayPage h1 {
+    font-size: 70px;
+    animation: birthdayText 2s infinite alternate;
+}
+
+#birthdayPage p {
+    font-size: 25px;
+    margin: 20px;
+    animation: fadeUp 2s ease;
+}
+
+@keyframes birthdayText {
+    from {
+        transform: scale(1);
+        text-shadow: 0 0 10px black;
+    }
+
+    to {
+        transform: scale(1.08);
+        text-shadow:
+        0 0 15px white,
+        0 0 30px yellow,
+        0 0 45px pink;
+    }
+}
+
+/* =========================
+   PARTY PAGE
+========================= */
+
+#partyPage {
+    flex-direction: column;
+}
+
+#partyPage h1 {
+    font-size: 55px;
+    z-index: 5;
+    animation: fadeUp 1.5s ease;
+}
+
+#partyPage p {
+    font-size: 22px;
+    margin: 15px;
+    z-index: 5;
+}
+
+/* BALLOONS */
+
+.balloon {
+    position: absolute;
+    bottom: -150px;
+    font-size: 65px;
+    animation: balloonUp linear infinite;
+}
+
+.balloon:nth-child(1) {
+    left: 5%;
+    animation-duration: 7s;
+}
+
+.balloon:nth-child(2) {
+    left: 20%;
+    animation-duration: 9s;
+}
+
+.balloon:nth-child(3) {
+    left: 40%;
+    animation-duration: 8s;
+}
+
+.balloon:nth-child(4) {
+    left: 60%;
+    animation-duration: 10s;
+}
+
+.balloon:nth-child(5) {
+    left: 80%;
+    animation-duration: 7s;
+}
+
+@keyframes balloonUp {
+    0% {
+        bottom: -150px;
+        transform: rotate(-10deg);
+    }
+
+    50% {
+        transform: translateX(50px) rotate(10deg);
+    }
+
+    100% {
+        bottom: 110%;
+        transform: translateX(-50px) rotate(-10deg);
+    }
+}
+
+/* STARS */
+
+.star {
+    position: absolute;
+    font-size: 30px;
+    animation: starMove 3s infinite alternate;
+}
+
+.star:nth-child(6) {
+    top: 10%;
+    left: 10%;
+}
+
+.star:nth-child(7) {
+    top: 20%;
+    right: 15%;
+}
+
+.star:nth-child(8) {
+    bottom: 20%;
+    left: 15%;
+}
+
+.star:nth-child(9) {
+    bottom: 15%;
+    right: 10%;
+}
+
+@keyframes starMove {
+    from {
+        transform: scale(0.5) rotate(0deg);
+        opacity: 0.4;
+    }
+
+    to {
+        transform: scale(1.4) rotate(180deg);
+        opacity: 1;
+    }
+}
+
+/* =========================
+   WISHES
+========================= */
+
+#wishesPage {
+    flex-direction: column;
+}
+
+#wishesPage h1 {
+    font-size: 55px;
+    animation: glow 2s infinite alternate;
+}
+
+.wish-box {
+    max-width: 700px;
+    margin: 25px;
+}
+
+.wish-box p {
+    font-size: 24px;
+    line-height: 1.8;
+    animation: textAppear 2s ease;
+}
+
+@keyframes textAppear {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================
+   PHOTOS
+========================= */
+
+#photosPage {
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+#photosPage h1 {
+    font-size: 45px;
+    margin-bottom: 20px;
+    animation: glow 2s infinite alternate;
+}
+
+.photo-container {
+    width: 90%;
+    max-width: 1000px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    max-height: 65vh;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.photo {
+    height: 200px;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    opacity: 0;
+    animation: photoAppear 1.2s forwards;
+}
+
+.photo:nth-child(1) {
+    animation-delay: 0.2s;
+}
+
+.photo:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.photo:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+.photo:nth-child(4) {
+    animation-delay: 0.8s;
+}
+
+.photo:nth-child(5) {
+    animation-delay: 1s;
+}
+
+.photo:nth-child(6) {
+    animation-delay: 1.2s;
+}
+
+.photo:nth-child(7) {
+    animation-delay: 1.4s;
+}
+
+.photo:nth-child(8) {
+    animation-delay: 1.6s;
+}
+
+.photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: 0.5s;
+}
+
+.photo:hover img {
+    transform: scale(1.12) rotate(2deg);
+}
+
+@keyframes photoAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) rotate(-10deg);
+    }
+
+    70% {
+        transform: scale(1.08) rotate(3deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+/* =========================
+   POETRY
+========================= */
+
+#poetryPage {
+    flex-direction: column;
+}
+
+.poetry {
+    max-width: 750px;
+}
+
+.poetry h1 {
+    font-size: 55px;
+    margin-bottom: 25px;
+    animation: glow 2s infinite alternate;
+}
+
+.poetry p {
+    font-size: 25px;
+    line-height: 2;
+    animation: poetryAppear 3s ease;
+}
+
+@keyframes poetryAppear {
+    0% {
+        opacity: 0;
+        transform: translateY(80px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================
+   FINAL PAGE
+========================= */
+
+#finalPage {
+    flex-direction: column;
+}
+
+#finalPage h1 {
+    font-size: 65px;
+    animation: finalGlow 2s infinite alternate;
+}
+
+#finalPage p {
+    font-size: 25px;
+    margin: 20px;
+    animation: fadeUp 2s ease;
+}
+
+@keyframes finalGlow {
+    from {
+        transform: scale(1);
+        text-shadow: 0 0 10px red;
+    }
+
+    to {
+        transform: scale(1.1);
+        text-shadow:
+        0 0 20px white,
+        0 0 40px #ffeb3b,
+        0 0 60px pink;
+    }
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================
+   HEARTS
+========================= */
+
+.heart {
+    position: absolute;
+    bottom: -50px;
+    font-size: 25px;
+    animation: heartUp 6s linear infinite;
+    opacity: 0.8;
+}
+
+@keyframes heartUp {
+    0% {
+        bottom: -50px;
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    100% {
+        bottom: 110%;
+        opacity: 0;
+        transform: translateX(100px);
+    }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width: 700px) {
+
+    #qrPage h1 {
+        font-size: 30px;
+    }
+
+    #birthdayPage h1 {
+        font-size: 45px;
+    }
+
+    #partyPage h1 {
+        font-size: 40px;
+    }
+
+    #wishesPage h1,
+    #photosPage h1,
+    .poetry h1 {
+        font-size: 38px;
+    }
+
+    .wish-box p,
+    .poetry p {
+        font-size: 18px;
+    }
+
+    .photo-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .photo {
+        height: 150px;
+    }
+
+    #countdown {
+        font-size: 90px;
+    }
+
+    #finalPage h1 {
+        font-size: 42px;
+    }
+
+    #finalPage p {
+        font-size: 18px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- =========================
+     QR PAGE
+========================= -->
+
+<section id="qrPage" class="page active">
+
+    <h1>🎁 Birthday Surprise 🎁</h1>
+
+    <p>Scan the QR Code to unlock your surprise 💖</p>
+
+    <div id="reader"></div>
+
+</section>
+
+
+<!-- =========================
+     COUNTDOWN
+========================= -->
+
+<section id="countdownPage" class="page">
+
+    <h1>Get Ready! 🎉</h1>
+
+    <div id="countdown">3</div>
+
+</section>
+
+
+<!-- =========================
+     HAPPY BIRTHDAY
+========================= -->
+
+<section id="birthdayPage" class="page">
+
+    <h1>🎂 Happy Birthday! 🎂</h1>
+
+    <p>Today is your special day! 💖✨</p>
+
+    <button onclick="showPage('partyPage')">
+        Next 💕
+    </button>
+
+</section>
+
+
+<!-- =========================
+     PARTY
+========================= -->
+
+<section id="partyPage" class="page">
+
+    <div class="balloon">🎈</div>
+    <div class="balloon">🎈</div>
+    <div class="balloon">🎈</div>
+    <div class="balloon">🎈</div>
+    <div class="balloon">🎈</div>
+
+    <div class="star">⭐</div>
+    <div class="star">✨</div>
+    <div class="star">🌟</div>
+    <div class="star">✨</div>
+
+    <h1>🎉 Let's Celebrate! 🎉</h1>
+
+    <p>🌸 Balloons • Flowers • Stars • Happiness 🌸</p>
+
+    <button onclick="showPage('wishesPage')">
+        Next 💖
+    </button>
+
+</section>
+
+
+<!-- =========================
+     WISHES
+========================= -->
+
+<section id="wishesPage" class="page">
+
+    <h1>💌 Birthday Wishes 💌</h1>
+
+    <div class="wish-box">
+
+        <p>
+            May your birthday bring you endless happiness,
+            beautiful memories and countless reasons to smile. 💕
+            <br><br>
+
+            May every dream you have come true,
+            and may every new day bring something beautiful
+            into your life. ✨
+            <br><br>
+
+            Keep smiling, keep shining,
+            and always stay the amazing person you are. 🌸
+        </p>
+
+    </div>
+
+    <button onclick="showPage('photosPage')">
+        Next 📸
+    </button>
+
+</section>
+
+
+<!-- =========================
+     PHOTOS
+========================= -->
+
+<section id="photosPage" class="page">
+
+    <h1>📸 Beautiful Memories 📸</h1>
+
+    <div class="photo-container">
+
+        <div class="photo">
+            <img src="web.1.jpeg">
+        </div>
+
+        <div class="photo">
+            <img src="web2..jpeg">
+        </div>
+
+        <div class="photo">
+            <img src="web3..jpeg">
+        </div>
+
+        <div class="photo">
+            <img src="web4..jpeg">
+        </div>
+
+        <div class="photo">
+            <img src="web5..jpeg">
+        </div>
+
+        <div class="photo">
+            <img src="web6.jpeg">
+        </div>
+
+        <div class="photo">
+            <img src="web7.jpeg">
+        </div>
+
+        <div class="photo">
+            <img src="web8.jpeg">
+        </div>
+
+    </div>
+
+    <br>
+
+    <button onclick="showPage('poetryPage')">
+        Next 💕
+    </button>
+
+</section>
+
+
+<!-- =========================
+     POETRY
+========================= -->
+
+<section id="poetryPage" class="page">
+
+    <div class="poetry">
+
+        <h1>💕 For Two Hearts 💕</h1>
+
+        <p>
+            Two hearts, two souls, one beautiful story,<br>
+            Walking together through every dream and glory.<br><br>
+
+            May every sunrise bring a reason to smile,<br>
+            And every moment together be worth every mile. ✨<br><br>
+
+            Through every season, through every new day,<br>
+            May happiness always find its way. 💖
+        </p>
+
+    </div>
+
+    <br>
+
+    <button onclick="showPage('finalPage')">
+        One Last Surprise 🎁
+    </button>
+
+</section>
+
+
+<!-- =========================
+     FINAL
+========================= -->
+
+<section id="finalPage" class="page">
+
+    <h1>🎂 Happy Birthday! 🎂</h1>
+
+    <p>
+        May your life always be filled with<br>
+        Love ❤️ Happiness 💕 and Beautiful Memories ✨
+    </p>
+
+    <p>
+        🎉 Have the most amazing birthday ever! 🎉
+    </p>
+
+</section>
+
+
+<script>
+
+/* =========================
+   PAGE CHANGE
+========================= */
+
+function showPage(pageId) {
+
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
+
+    document.getElementById(pageId).classList.add("active");
+
+}
+
+
+/* =========================
+   COUNTDOWN
+========================= */
+
+function startCountdown() {
+
+    showPage("countdownPage");
+
+    let number = 3;
+
+    const countdown = document.getElementById("countdown");
+
+    countdown.innerHTML = number;
+
+    let timer = setInterval(() => {
+
+        number--;
+
+        if(number > 0) {
+
+            countdown.innerHTML = number;
+
+        }
+
+        else {
+
+            clearInterval(timer);
+
+            setTimeout(() => {
+
+                showPage("birthdayPage");
+
+            }, 800);
+
+        }
+
+    }, 1000);
+
+}
+
+
+/* =========================
+   QR SCANNER
+========================= */
+
+function onScanSuccess(decodedText, decodedResult) {
+
+    console.log("QR Scanned:", decodedText);
+
+    if(window.html5QrcodeScanner) {
+
+        window.html5QrcodeScanner.clear();
+
+    }
+
+    startCountdown();
+
+}
+
+
+/* =========================
+   START QR SCANNER
+========================= */
+
+window.html5QrcodeScanner = new Html5QrcodeScanner(
+
+    "reader",
+
+    {
+        fps: 10,
+        qrbox: {
+            width: 250,
+            height: 250
+        }
+    },
+
+    false
+
+);
+
+window.html5QrcodeScanner.render(
+    onScanSuccess,
+    onScanFailure
+);
+
+
+function onScanFailure(error) {
+
+    // Ignore scanning errors
+}
+
+
+/* =========================
+   FLOATING HEARTS
+========================= */
+
+function createHeart() {
+
+    const heart = document.createElement("div");
+
+    heart.className = "heart";
+
+    heart.innerHTML = "❤️";
+
+    heart.style.left = Math.random() * 100 + "%";
+
+    heart.style.animationDuration =
+        (4 + Math.random() * 5) + "s";
+
+    heart.style.fontSize =
+        (15 + Math.random() * 25) + "px";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+
+        heart.remove();
+
+    }, 9000);
+
+}
+
+setInterval(createHeart, 700);
+
+</script>
+
+</body>
+</html>
